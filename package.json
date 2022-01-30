@@ -4,7 +4,7 @@
   "description": "A simple tool for conscious logging and predictable planning",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild index.jsx --bundle --outfile=build/index.js",
+    "start": "cp index.html build/index.html && esbuild src/index.jsx --bundle --outfile=build/index.js --servedir=build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
