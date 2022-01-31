@@ -4,6 +4,7 @@
   "description": "A simple tool for conscious logging and predictable planning",
   "main": "index.js",
   "scripts": {
+    "build": "./build.js",
     "start": "cp index.html build/index.html && esbuild src/index.jsx --bundle --outfile=build/index.js --servedir=build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,9 +26,12 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.10.1",
     "@typescript-eslint/parser": "^5.10.1",
+    "css-tree": "^2.0.4",
+    "esbuild-css-modules-plugin": "^2.0.9",
     "eslint": "^8.8.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.28.0",
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "typescript-plugin-css-modules": "^3.4.0"
   }
 }
