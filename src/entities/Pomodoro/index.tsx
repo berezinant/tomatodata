@@ -4,9 +4,7 @@ import './styles.css';
 export type Pomodoro = {
   startedAt: number;
   duration: number;
-  text: string;
   task: string;
-  details?: string;
 };
 
 interface PomodoroProps {
@@ -14,7 +12,7 @@ interface PomodoroProps {
 }
 
 export const Pomodoro: React.FC<PomodoroProps> = ({ pomodoro }) => (
-  <div className='pomodoro'>🍅 {pomodoro.text}</div>
+  <div className='pomodoro'>🍅 {pomodoro.task}</div>
 );
 
 Pomodoro.displayName = 'Pomodoro';

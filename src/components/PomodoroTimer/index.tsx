@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './styles.css';
 import { useCallback, useEffect, useState } from 'react';
-import { getPomodoroStartedAt, setPomodoroStartedAt } from '../../storage';
+import { addPomodoroToList, clearPomodoroStartedAt, getPomodoroStartedAt, setPomodoroStartedAt } from '../../storage';
 
 const SECOND = 1000;
 const MINUTE = 60 * SECOND;
@@ -20,8 +20,7 @@ const getPomodoroTimeLeft = ({ duration, startedAt }: { duration: number; starte
 
 const startTimer =
   ({
-     onStart = () => {
-     },
+     onStart = () => null,
      onTick,
      onComplete,
      duration,
@@ -61,13 +60,14 @@ type TimerState = 'idle' | 'in-progress' | 'completed';
 
 interface PomodoroTimer {
   duration?: number;
+  onComplete?: () => void;
 }
 
-export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE }) => {
+export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE, onComplete = () => null }) => {
   let timer: Timer = { pomodoro: undefined, tick: undefined };
 
   const [state, setState] = useState<TimerState>('idle');
-  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [timeLeft, setTimeLeft] = useState<number>(duration);
   const [task, setTask] = useState<string>('');
 
   useEffect(() => {
@@ -80,6 +80,7 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE 
         onComplete: () => setState('completed'),
       });
       if (timer) {
+        setTimeLeft(getPomodoroTimeLeft({ duration, startedAt }));
         setState('in-progress');
       } else {
         setState('completed');
@@ -101,6 +102,7 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE 
       onTick: () => setTimeLeft(getPomodoroTimeLeft({ duration, startedAt })),
       onComplete: () => setState('completed'),
     }));
+    setTimeLeft(getPomodoroTimeLeft({ duration, startedAt }));
     setState('in-progress');
   });
 
@@ -108,6 +110,7 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE 
     if (timer) {
       cancelTimer(timer);
     }
+    clearPomodoroStartedAt();
     setState('idle');
   });
 
@@ -115,13 +118,16 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE 
     if (timer) {
       cancelTimer(timer);
     }
+    addPomodoroToList({ startedAt: getPomodoroStartedAt(), duration, task });
+    clearPomodoroStartedAt();
     setState('idle');
+    onComplete();
   });
 
   return (
     <div className='timer'>
       <h2>
-        Current pomodoro <small>{state}</small>
+        Current pomodoro
       </h2>
       {state === 'idle' && (
         <>
@@ -130,7 +136,7 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE 
       )}
       {state === 'in-progress' && (
         <>
-          <span>Time left: {timeLeft}</span>
+          <span>Time left: {timeLeft}</span>&nbsp;
           <button onClick={handleCancel}>Cancel</button>
         </>
       )}
@@ -141,7 +147,8 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE 
             value={task}
             onChange={(e) => setTask(e.target.value)}
           />
-          <button onClick={handleComplete}>Complete</button>
+          &nbsp;
+          <button onClick={handleComplete} disabled={!task}>Complete</button>
         </>
       )}
     </div>
