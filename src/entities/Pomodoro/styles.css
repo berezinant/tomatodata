@@ -1,3 +1,8 @@
 .pomodoro {
+  display: flex;
+  align-items: center;
+}
 
+.pomodoro__name {
+  flex-basis: 30%;
 }

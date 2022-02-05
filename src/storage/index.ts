@@ -1,14 +1,14 @@
-import { Pomodoro } from '../entities/Pomodoro';
+import { PomodoroDto } from '../entities/Pomodoro';
 
 const LS_POMODORO_STARTED_AT = 'LS_POMODORO_STARTED_AT';
 const LS_POMODORO_LIST = 'LS_POMODORO_LIST';
 
-export const getPomodoroList = (): Pomodoro[] => {
+export const getPomodoroList = (): PomodoroDto[] => {
   const pomodoroList = localStorage.getItem(LS_POMODORO_LIST);
   return pomodoroList ? JSON.parse(pomodoroList) : [];
 };
 
-export const addPomodoroToList = (pomodoro: Pomodoro) => {
+export const addPomodoroToList = (pomodoro: PomodoroDto) => {
   const currentList = getPomodoroList();
   currentList.push(pomodoro);
   localStorage.setItem(LS_POMODORO_LIST, JSON.stringify(currentList));

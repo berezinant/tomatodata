@@ -118,9 +118,10 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE,
     if (timer) {
       cancelTimer(timer);
     }
-    addPomodoroToList({ startedAt: getPomodoroStartedAt(), duration, task });
+    addPomodoroToList({ startedAt: getPomodoroStartedAt(), duration, task, taskName: task });
     clearPomodoroStartedAt();
     setState('idle');
+    setTask('');
     onComplete();
   });
 
@@ -143,6 +144,7 @@ export const PomodoroTimer: React.FC<PomodoroTimer> = ({ duration = 25 * MINUTE,
       {state === 'completed' && (
         <>
           <input
+            name='pomodoro'
             placeholder='Task: details'
             value={task}
             onChange={(e) => setTask(e.target.value)}

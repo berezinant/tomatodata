@@ -1,18 +1,24 @@
 import * as React from 'react';
 import './styles.css';
 
-export type Pomodoro = {
+export type PomodoroDto = {
   startedAt: number;
   duration: number;
   task: string;
+  taskName: string;
+  taskDetails?: string;
 };
 
 interface PomodoroProps {
-  pomodoro: Pomodoro;
+  pomodoro: PomodoroDto;
+  amount?: number;
 }
 
-export const Pomodoro: React.FC<PomodoroProps> = ({ pomodoro }) => (
-  <div className='pomodoro'>🍅 {pomodoro.task}</div>
+export const Pomodoro: React.FC<PomodoroProps> = ({ pomodoro, amount = 1 }) => (
+  <div className='pomodoro'>
+    <div className='pomodoro__name'>{pomodoro.task}</div>
+    <div>{[...new Array(amount)].map((_, i) => <React.Fragment key={i}>🍅</React.Fragment>)}</div>
+  </div>
 );
 
 Pomodoro.displayName = 'Pomodoro';
